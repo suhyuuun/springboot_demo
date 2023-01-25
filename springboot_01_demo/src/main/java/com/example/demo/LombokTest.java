@@ -10,6 +10,8 @@ public class LombokTest {
 		
 		System.out.printf("%s %d %s\n",dto.getName(),dto.getAge(),dto.getLoc());
 		
+		MemDTO dto2 = new MemDTO("전혜빈",25, "대전");
+		System.out.printf("%s %d %s\n",dto2.getName(),dto2.getAge(),dto2.getLoc());
 	}
 
 }

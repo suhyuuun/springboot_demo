@@ -29,6 +29,13 @@ dependencies {
 	
 	//jstl
 	implementation 'javax.servlet:jstl:1.2'
+	
+	//project lombok
+	compileOnly 'org.projectlombok:lombok:1.18.20'
+	annotationProcessor 'org.projectlombok:lombok:1.18.20'
+	
+	//
+	
 
 }
 

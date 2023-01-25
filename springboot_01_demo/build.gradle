@@ -20,13 +20,16 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools' //개발시 필요한 도구 배포할때는 제거
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	//jstl
-	implementation 'javax.servlet:jstl:1.2'
+	
 	//spring boot web
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	//implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '3.0.1'
+
 	//jsp
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+	
+	//jstl
+	implementation 'javax.servlet:jstl:1.2'
+
 }
 
 tasks.named('test') {

@@ -25,22 +25,17 @@ public class TodoServiceImp implements TodoService{
 
 	@Override
 	public int insert(TodoDTO dto) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		return todoDAO.insertTodoList(dto);
 	}
 
 	@Override
-	public int update(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+	public int update(TodoDTO dto) throws Exception {
+		return todoDAO.updateTodoList(dto);
 	}
 
 	@Override
 	public int delete(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return 0;
+		return todoDAO.deleteTodoList(id);
 	}
-	
-	
 
 }

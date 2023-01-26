@@ -7,4 +7,20 @@
  	<select id="getTodoList" resultType="TodoDTO"> <!--id명과 interface에 있는 이름을 같게 해줘야함 -->
 		SELECT * FROM todolist
 	</select>
+	
+	<insert id="insertTodoList" parameterType="TodoDTO">
+		INSERT INTO todolist(id, todoname) 
+		VALUES(todo_id_seq.nextval, #{todoname})
+	</insert>
+	
+	<update id="updateTodoList" parameterType="TodoDTO">
+		UPDATE todolist
+		SET completed = #{completed}
+		WHERE id=#{id}
+	</update>
+	
+	<delete id="deleteTodoList" parameterType="int">
+		DELETE FROM todolist
+		WHERE id=#{id}
+	</delete>
 </mapper>

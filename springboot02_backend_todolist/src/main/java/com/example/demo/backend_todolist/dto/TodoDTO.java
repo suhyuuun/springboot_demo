@@ -34,7 +34,7 @@ SELECT * FROM todolist;
  * @Data : @Getter, @Setter, @ToString, @EqualAndHashCode, @RequestedAtrgusConstructor을 합쳐놓은 어노테이션이다.
  */
 
-@Component //특정한 의미가 없는 클래스들은 알아서 빈으로 생성됨
+@Component //특정한 의미가 없는 클래스들은 알아서 빈으로 생성됨, 개발자가 직접 작성한 Class를 Bean으로 등록하기위한 어노테이션
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

@@ -1,5 +1,7 @@
-package backend_todolist.dto;
+package com.example.demo.backend_todolist.dto;
 
+
+import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,6 +34,7 @@ SELECT * FROM todolist;
  * @Data : @Getter, @Setter, @ToString, @EqualAndHashCode, @RequestedAtrgusConstructor을 합쳐놓은 어노테이션이다.
  */
 
+@Component //특정한 의미가 없는 클래스들은 알아서 빈으로 생성됨
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-//http://localhost:8090
+//http://localhost:8090/
 //http://localhost:8090/hello.do
 
 

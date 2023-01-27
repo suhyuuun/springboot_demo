@@ -16,9 +16,10 @@ repositories {
 }
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.session:spring-session-core'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	
 	//aop
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
@@ -32,7 +33,7 @@ dependencies {
 	//jackson
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
 	
-	//lomblok
+	//lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	

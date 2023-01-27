@@ -3,6 +3,7 @@ package com.example.board.service;
 import java.io.File;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.board.dao.BoardDAO;
@@ -11,6 +12,7 @@ import com.example.board.dto.PageDTO;
 
 @Service
 public class BoardServiceImp implements BoardService{
+	@Autowired
    private BoardDAO dao;
    
    public BoardServiceImp() {

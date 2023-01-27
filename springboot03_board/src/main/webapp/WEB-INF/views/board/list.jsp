@@ -54,8 +54,8 @@ table,tr,th,td{
             <c:param name="num" value="${dto.num}" />
           </c:url>
           <c:if test="${dto.re_level>0}">
-           <img src="resources/images/level.gif" width="${20*dto.re_level}" height="15" />
-           <img src="resources/images/re.gif" />
+           <img src="resources/static/images/level.gif" width="${20*dto.re_level}" height="15" />
+           <img src="resources/static/images/re.gif" />
           </c:if>
            <a href="${path}">${dto.subject}</a>
          </td>
@@ -75,7 +75,7 @@ table,tr,th,td{
       <!-- 페이지 출력 시작 -->
        <c:forEach var="i" begin="${pv.startPage}"  end="${pv.endPage}">
          <span>
-          <c:url var="currPage" value="list.sb">
+          <c:url var="currPage" value="list.do">
               <c:param name="currentPage" value="${i}" />
            </c:url>  
            <c:choose>
@@ -92,7 +92,7 @@ table,tr,th,td{
       
       <!-- 다음 출력 시작 -->
        <c:if test="${pv.endPage<pv.totalPage}">
-          <a href="list.sb?currentPage=${pv.startPage+pv.blockPage}">다음</a>
+          <a href="list.do?currentPage=${pv.startPage+pv.blockPage}">다음</a>
        </c:if>
      <!-- 다음 출력 끝 -->
       

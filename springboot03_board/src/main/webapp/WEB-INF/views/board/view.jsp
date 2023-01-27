@@ -12,7 +12,6 @@ table {
 	border: 1px solid black;
 	width: "80%"
 }
-
 </style>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -20,11 +19,11 @@ table {
 <script type="text/javascript">
 	$(document).ready(function() {
        $("#list").click(function(){
-    	   $('#frm').attr("action","list.sb").submit();
+    	   $('#frm').attr("action","list.do").submit();
        });
        
        $("#reply").click(function(){
-    	   $('#frm').attr("action","write.sb").submit();
+    	   $('#frm').attr("action","write.do").submit();
        });
        
        $('#update').click(function(){
@@ -33,7 +32,7 @@ table {
        
        
        $('#delete').click(function(){
-    	   $('#frm').attr("action", "delete.sb").submit();
+    	   $('#frm').attr("action", "delete.do").submit();
        });
        
 	});
@@ -66,7 +65,7 @@ table {
 		<tr>
 			<th>파일</th>  
 			<td colspan="3"><c:if test="${!empty dto.upload}">
-					<a href="contentdownload.sb?num=${dto.num}">
+					<a href="contentdownload.do?num=${dto.num}">
 						${fn:substringAfter(dto.upload,"_")} </a>
 				</c:if> <c:if test="${empty dto.upload }">
 					<c:out value="첨부파일 없음" />

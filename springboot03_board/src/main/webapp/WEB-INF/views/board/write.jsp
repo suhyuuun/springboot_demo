@@ -14,15 +14,15 @@
   $(document).ready(function(){
 	 
 	  $('#btnList').click(function(){
-		  $('#frm').attr('action','list.sb');		
+		  $('#frm').attr('action','list.do');		
 		  $('#frm').submit();
-		  // $('#frm').attr('action','list.sb').submit();
+		  // $('#frm').attr('action','list.do').submit();
 	  });
 	  
 	  $('#btnSave').click(function(){
 		  $('[name=content]').val(
 					$('[name=content]').val().replace(/\n/gi, '<br/>'));	
-		  $('#frm').attr('action','write.sb').submit();
+		  $('#frm').attr('action','write.do').submit();
 	  });
 	  
 	$('#filepath').change(function(){
@@ -39,7 +39,7 @@
 </head>
 <body>
 	<form name="frm" id="frm" method="post"
-	      enctype="multipart/form-data">
+	      enctype="multipart/form-data" >
 
 		<table>
 			<tr>

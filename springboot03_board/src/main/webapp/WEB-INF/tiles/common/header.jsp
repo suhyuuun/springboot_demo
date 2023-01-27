@@ -14,8 +14,8 @@
 
   <div>
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/member/login.do">로그인</a></li>
-        <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/member/signup.do">회원가입</a></li>
+        <li class="nav-item"><a  class="nav-link" href="${pageContext.request.contextPath}/member/login.do">로그인</a></li>
+        <li class="nav-item"><a class="nav-link"  href="${pageContext.request.contextPath}/member/signup.do">회원가입</a></li>
         <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/board/list.do">게시판</a></li>
       </ul>
   </div> 

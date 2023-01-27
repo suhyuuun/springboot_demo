@@ -12,6 +12,7 @@ table {
 	border: 1px solid black;
 	width: "80%"
 }
+
 </style>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

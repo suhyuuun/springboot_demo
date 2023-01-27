@@ -21,7 +21,7 @@ import com.example.board.service.BoardService;
 
 
 
-// http://localhost:8090/myapp/list.sb
+// http://localhost:8090/board/list
 
 @Controller
 public class BoardController {
@@ -38,7 +38,7 @@ public class BoardController {
       this.service = service;
    }
    
-   @RequestMapping("/list.sb")
+   @RequestMapping("/list.do")
    public ModelAndView listMethod(PageDTO pv, ModelAndView mav) {
       int totalRecord = service.countProcess();
       if(totalRecord>=1) {
@@ -57,7 +57,7 @@ public class BoardController {
       return mav;
    }
    
-   @RequestMapping(value="/write.sb", method=RequestMethod.GET)
+   @RequestMapping(value="/write.do", method=RequestMethod.GET)
    public ModelAndView writeMethod(BoardDTO dto, PageDTO pv, ModelAndView mav) {
       if(dto.getRef() != 0) { //답변글이면
          mav.addObject("currentPage", pv.getCurrentPage());
@@ -67,7 +67,7 @@ public class BoardController {
       return mav;
    }//end writeMethod
    
-   @RequestMapping(value="/write.sb", method=RequestMethod.POST)
+   @RequestMapping(value="/write.do", method=RequestMethod.POST)
    public String writeProMethod(BoardDTO dto, PageDTO pv, HttpServletRequest request) {
       MultipartFile file = dto.getFilename();
       if(!file.isEmpty()) {
@@ -82,14 +82,14 @@ public class BoardController {
       
       //답변글이면
       if(dto.getRef() != 0) {
-         return "redirect:/list.sb?currentPage=" + pv.getCurrentPage();
+         return "redirect:/list.do?currentPage=" + pv.getCurrentPage();
       }else {//제목글
-         return "redirect:/list.sb";
+         return "redirect:/list.do";
       }
       
    }//end writeProMethod()
    
-   @RequestMapping(value="/update.sb", method=RequestMethod.GET)
+   @RequestMapping(value="/update.do", method=RequestMethod.GET)
    public ModelAndView updateMethod(int num, int currentPage,ModelAndView mav) {
       mav.addObject("dto", service.updateSelectProcess(num));
       mav.addObject("currentPage", currentPage);
@@ -97,7 +97,7 @@ public class BoardController {
       return mav;
    }//end updateMethod
    
-   @RequestMapping(value="/update.sb", method=RequestMethod.POST)
+   @RequestMapping(value="/update.do", method=RequestMethod.POST)
    public String updateProMethod(BoardDTO dto, int currentPage, HttpServletRequest request) {
       MultipartFile file = dto.getFilename();
       if(!file.isEmpty()) {
@@ -105,17 +105,17 @@ public class BoardController {
          dto.setUpload(random + "_" + file.getOriginalFilename());
       }
       service.updateProcess(dto, urlPath(request));
-      return "redirect:/list.sb?currentPage=" + currentPage;
+      return "redirect:/list.do?currentPage=" + currentPage;
    }//end updateProMethod
    
-   @RequestMapping("/delete.sb")
+   @RequestMapping("/delete.do")
    public String deleteMethod(int num, int currentPage, HttpServletRequest request) {
       service.deleteProcess(num, urlPath(request));
       
       int totalRecord = service.countProcess();
       this.pdto = new PageDTO(this.currentPage, totalRecord);
       
-      return "redirect:/list.sb?currentPage=" + this.pdto.getCurrentPage();
+      return "redirect:/list.do?currentPage=" + this.pdto.getCurrentPage();
    }//end deleteMethod
    
    
@@ -152,14 +152,14 @@ public class BoardController {
       return saveDirectory;
    }
    
-   @RequestMapping("/view.sb")
+   @RequestMapping("/view.do")
    public ModelAndView viewMethod(int currentPage, int num, ModelAndView mav) {
       mav.addObject("dto", service.contentProcess(num));
       mav.addObject("currentPage", currentPage);
       mav.setViewName("board/view");
       return mav;
    }
-   @RequestMapping("/contentdownload.sb")
+   @RequestMapping("/contentdownload.do")
    public ModelAndView downMethod(int num, ModelAndView mav) {
       mav.addObject("num", num);
       mav.setViewName("download");

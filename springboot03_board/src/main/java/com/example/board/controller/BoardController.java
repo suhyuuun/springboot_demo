@@ -94,11 +94,13 @@ public class BoardController {
 	//multipart/form-data : @RequestBody 선언없이 그냥 받음 BoardDTO dto
 
 	@RequestMapping(value = "/board/write", method = RequestMethod.POST)
-	public String writeProMethod(BoardDTO dto, PageDTO pv, HttpServletRequest request) {
+	public String writeProMethod(BoardDTO dto, PageDTO pv, HttpServletRequest request) throws IllegalStateException, IOException {
 		MultipartFile file = dto.getFilename();
 		if (file != null && !file.isEmpty()) {
 			UUID random = saveCopyFile(file, request);
 			dto.setUpload(random + "_" + file.getOriginalFilename());
+			// \\download\\temp 경로에 첨부파일 저장
+			file.transferTo(new File(file.getOriginalFilename()));
 		}
 
 		dto.setIp(request.getRemoteAddr());	

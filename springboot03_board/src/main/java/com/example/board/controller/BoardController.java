@@ -3,16 +3,22 @@ package com.example.board.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -20,9 +26,9 @@ import com.example.board.dto.BoardDTO;
 import com.example.board.dto.PageDTO;
 import com.example.board.service.BoardService;
 
-// http://localhost:8090/list.do
+// http://localhost:8090/board/list
 
-@Controller
+@RestController
 public class BoardController {
 
 	@Autowired
@@ -32,6 +38,10 @@ public class BoardController {
 	private PageDTO pdto;
 	
 	private int currentPage ;
+	
+	@Value("${spring.servlet.multipart.location}")
+	private String filePath;
+	
 
 	public BoardController() {
 
@@ -41,9 +51,10 @@ public class BoardController {
 		this.service = service;
 	}
 
-	@RequestMapping("/list.do")
-	public ModelAndView listMethod(PageDTO pv, ModelAndView mav) {
-	
+	@RequestMapping("/board/list/{currentPage}")
+	public Map<String, Object> listMethod(@PathVariable("currentPage") int currentPage, PageDTO pv) {
+		System.out.println("currentPage: " + currentPage);
+		Map<String, Object> map = new HashMap<>();
 		int totalRecord = service.countProcess();
 		if (totalRecord >= 1) {
 			if (pv.getCurrentPage() == 0)
@@ -53,15 +64,20 @@ public class BoardController {
 
 			this.pdto = new PageDTO(this.currentPage, totalRecord);
 			List<BoardDTO> aList = service.listProcess(this.pdto);
-			mav.addObject("aList", aList);
-			mav.addObject("pv", this.pdto);
+			//mav.addObject("aList", aList);
+			//mav.addObject("pv", this.pdto);
+			System.out.println("aList: " + aList);
+			map.put("aList",aList);
+			map.put("pv", this.pdto);
 		}
 
-		mav.setViewName("board/list");
-		return mav;
+//		mav.setViewName("board/list");
+//		return mav;
+		System.out.println(map.get("aList"));
+		return map;
 	}// end listMethod()
 
-	@RequestMapping(value = "/write.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/board/write", method = RequestMethod.GET)
 	public ModelAndView writeMethod(BoardDTO dto, PageDTO pv, ModelAndView mav) {
 		if (dto.getRef() != 0) { // 답변글이면
 			mav.addObject("currentPage", pv.getCurrentPage());
@@ -69,12 +85,18 @@ public class BoardController {
 		}
 		mav.setViewName("board/write");
 		return mav;
-	}// end writeMethod()
+	}// end writeMethod() 사용안함
+	
+	//RequestBody : json => 자바객체
+	//ResponseBody : 자바객체 => json
+	//@PathVariable : /board/list/:num => /board/list/1 => /board/list/{num}
+	//@RequestParam : /board/list?name=value => /board/list?num=1 => board/list
+	//multipart/form-data : @RequestBody 선언없이 그냥 받음 BoardDTO dto
 
-	@RequestMapping(value = "/write.do", method = RequestMethod.POST)
+	@RequestMapping(value = "/board/write", method = RequestMethod.POST)
 	public String writeProMethod(BoardDTO dto, PageDTO pv, HttpServletRequest request) {
 		MultipartFile file = dto.getFilename();
-		if (!file.isEmpty()) {
+		if (file != null && !file.isEmpty()) {
 			UUID random = saveCopyFile(file, request);
 			dto.setUpload(random + "_" + file.getOriginalFilename());
 		}
@@ -85,42 +107,43 @@ public class BoardController {
 
 		// 답변글이면
 		if (dto.getRef() != 0) {
-			return "redirect:/list.do?currentPage=" + pv.getCurrentPage();
+			return "redirect:/board/list/" + pv.getCurrentPage();
 		} else { // 제목글
-			return "redirect:/list.do";
+			return "redirect:/board/list/1";
 		}
 	}// end writeProMethod()
 	
 	
-	@RequestMapping(value="/update.do", method=RequestMethod.GET)
-	public ModelAndView updateMethod(int num, int currentPage, ModelAndView mav) {
-		 mav.addObject("dto", service.updateSelectProcess(num));
-		 mav.addObject("currentPage", currentPage);
-		 mav.setViewName("board/update");
-		return mav;
+	@RequestMapping(value="/board/update/{num}", method=RequestMethod.GET)
+	public BoardDTO updateMethod(int num) {
+//		 mav.addObject("dto", service.updateSelectProcess(num));
+//		 mav.addObject("currentPage", currentPage);
+//		 mav.setViewName("board/update");
+//		return mav;
+		return service.updateSelectProcess(num);
 	}//end updateMethod()
 	
-	@RequestMapping(value="/update.do", method=RequestMethod.POST)
-	public String updateProMethod(BoardDTO dto, int currentPage, HttpServletRequest request) {
+	@RequestMapping(value="/board/update", method=RequestMethod.PUT) //post에서 put으로 변경
+	public void updateProMethod(@RequestBody BoardDTO dto, HttpServletRequest request) {
+		System.out.printf("num: %d, content:%s, email:%s\n" ,dto.getNum(),dto.getContent(), dto.getEmail());
 		MultipartFile file = dto.getFilename();
-		if(!file.isEmpty()) {
+		if(file != null && !file.isEmpty()) {
 			UUID random = saveCopyFile(file, request);
 			dto.setUpload(random + "_" + file.getOriginalFilename());
 		}
-		
 		service.updateProcess(dto, urlPath(request));
-		return "redirect:/list.do?currentPage=" + currentPage;
+		//return "redirect:/board/list?currentPage=" + currentPage;
 	}//end updateProMethod
 	
 	
-	@RequestMapping("/delete.do")
-	public String deleteMethod(int num, int currentPage, HttpServletRequest request) {
+	@RequestMapping(value="/board/delete/{num}", method=RequestMethod.DELETE)
+	public void deleteMethod(@PathVariable("num") int num, HttpServletRequest request) {
 		service.deleteProcess(num, urlPath(request));
 		
-		int totalRecord = service.countProcess();
-		this.pdto = new PageDTO(this.currentPage, totalRecord);
+//		int totalRecord = service.countProcess();
+//		this.pdto = new PageDTO(this.currentPage, totalRecord);
 		
-		return "redirect:/list.do?currentPage=" + this.pdto.getCurrentPage();
+		//return "redirect:/board/list?currentPage=" + this.pdto.getCurrentPage();
 	}//end deleteMethod()
 	
 	
@@ -156,15 +179,16 @@ public class BoardController {
 		return saveDirectory;
 	}// end urlPath()
 
-	@RequestMapping("/view.do")
-	public ModelAndView viewMethod(int currentPage, int num, ModelAndView mav) {
-		mav.addObject("dto", service.contentProcess(num));
-		mav.addObject("currentPage", currentPage);
-		mav.setViewName("board/view");
-		return mav;
+	@RequestMapping("/board/view/{num}")
+	public BoardDTO viewMethod(@PathVariable("num") int num) {
+//		mav.addObject("dto", service.contentProcess(num));
+//		mav.addObject("currentPage", currentPage);
+//		mav.setViewName("board/view");
+//		return mav;
+		return service.contentProcess(num);
 	}// end viewMethod()
 
-	@RequestMapping("/contentdownload.do")
+	@RequestMapping("/board/contentdownload")
 	public ModelAndView downMethod(int num, ModelAndView mav) {
 		mav.addObject("num", num);
 		mav.setViewName("download");

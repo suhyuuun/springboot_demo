@@ -65,7 +65,7 @@ public class BoardController {
 
 	@RequestMapping("/board/list/{currentPage}")
 	public Map<String, Object> listMethod(@PathVariable("currentPage") int currentPage, PageDTO pv) {
-		System.out.println("currentPage: " + currentPage);
+//		System.out.println("currentPage: " + currentPage);
 		Map<String, Object> map = new HashMap<>();
 		int totalRecord = service.countProcess();
 		if (totalRecord >= 1) {
@@ -77,7 +77,7 @@ public class BoardController {
 			this.pdto = new PageDTO(this.currentPage, totalRecord);
 			List<BoardDTO> aList = service.listProcess(this.pdto);
 
-			System.out.println("aList: " + aList);
+//			System.out.println("aList: " + aList);
 			map.put("aList",aList);
 			map.put("pv", this.pdto);
 		}
@@ -106,9 +106,9 @@ public class BoardController {
 	public String writeProMethod(BoardDTO dto, PageDTO pv, HttpServletRequest request) throws IllegalStateException, IOException {
 		MultipartFile file = dto.getFilename();
 		if (file != null && !file.isEmpty()) {
-			UUID random = saveCopyFile(file, request);
+			UUID random = saveCopyFile(file);
 			dto.setUpload(random + "_" + file.getOriginalFilename());
-			// \\download\\temp 경로에 첨부파일 저장
+			// c:\\download\\temp 경로에 첨부파일 저장
 			file.transferTo(new File(random + "_" + file.getOriginalFilename()));
 		}
 
@@ -128,43 +128,46 @@ public class BoardController {
 	
 	
 	@RequestMapping(value="/board/update/{num}", method=RequestMethod.GET)
-	public BoardDTO updateMethod(int num) {
+	public BoardDTO updateMethod(@PathVariable("num") int num) {
 		return service.updateSelectProcess(num);
 	}//end updateMethod()
 	
 	@RequestMapping(value="/board/update", method=RequestMethod.PUT) //post에서 put으로 변경
-	public void updateProMethod(@RequestBody BoardDTO dto, HttpServletRequest request) {
-		System.out.printf("num: %d, content:%s, email:%s\n" ,dto.getNum(),dto.getContent(), dto.getEmail());
+	public void updateProMethod(BoardDTO dto, HttpServletRequest request) throws IllegalStateException, IOException {
+//		System.out.printf("num: %d, content:%s, email:%s\n" ,dto.getNum(),dto.getContent(), dto.getEmail());
 		MultipartFile file = dto.getFilename();
 		if(file != null && !file.isEmpty()) {
-			UUID random = saveCopyFile(file, request);
+			UUID random = saveCopyFile(file);
 			dto.setUpload(random + "_" + file.getOriginalFilename());
+			// c:\\download\\temp 경로에 첨부파일 저장
+			file.transferTo(new File(random + "_" + file.getOriginalFilename()));
 		}
-		service.updateProcess(dto, urlPath(request));
-		//return "redirect:/board/list?currentPage=" + currentPage;
+		service.updateProcess(dto, filePath);
 	}//end updateProMethod
 	
 	
 	@RequestMapping(value="/board/delete/{num}", method=RequestMethod.DELETE)
 	public void deleteMethod(@PathVariable("num") int num, HttpServletRequest request) {
-		service.deleteProcess(num, urlPath(request));
+		service.deleteProcess(num, filePath);
+
 
 	}//end deleteMethod()
 	
 	
-
-	private UUID saveCopyFile(MultipartFile file, HttpServletRequest request) {
+	// 사용안함
+	private UUID saveCopyFile(MultipartFile file) {
 		String fileName = file.getOriginalFilename();
 
 		// 중복파일명을 처리하기 위해 난수 발생
 		UUID random = UUID.randomUUID();
 
-		File fe = new File(urlPath(request));
-		if (!fe.exists()) {
-			fe.mkdir();
-		}
+//		File fe = new File(urlPath(request));
+//		if (!fe.exists()) {
+//			fe.mkdir();
+//		}
 
-		File ff = new File(urlPath(request), random + "_" + fileName);
+//		File ff = new File(urlPath(request), random + "_" + fileName);
+		File ff = new File(filePath, random + "_" + fileName);
 
 		try {
 			FileCopyUtils.copy(file.getInputStream(), new FileOutputStream(ff));

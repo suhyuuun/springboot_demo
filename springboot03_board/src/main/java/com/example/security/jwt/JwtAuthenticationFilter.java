@@ -52,6 +52,7 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
 //			}
 			
 			ObjectMapper om = new ObjectMapper();
+			//username, userpassword 저장된 값 저장됨
 			User user= om.readValue(request.getInputStream(), User.class);
 			System.out.printf("username:%s password:%s\n", user.getUsername(), user.getPassword());
 			
@@ -88,19 +89,24 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
     		                .withExpiresAt(new Date(System.currentTimeMillis() + (60*1000*3*1L))) //3분
     		                .withClaim("username",principalDetails.getUser().getUsername())
     		                .withClaim("authRole", principalDetails.getUser().getAuthRole())
-    		                .sign(Algorithm.HMAC512("mySecurityCos"));
+    		                .sign(Algorithm.HMAC512("mySecurityCos")); //알고리즘 이름
        System.out.println("jwtToken:" + jwtToken);
-       response.addHeader("Authorization", "Bearer " + jwtToken); 
+//       response.addHeader("Authorization", "Bearer " + jwtToken); 
+       //header에 토큰담음
+       response.setHeader("Authorization", "Bearer " + jwtToken);
+       response.setHeader("Pragma", "no-cache"); 
        
+       response.setContentType("application/json;charset=utf-8");
        final Map<String, Object> body = new HashMap<String, Object>();
        body.put("username", principalDetails.getUser().getUsername());
+       //body에 담은 걸 response에서 받음
        
        ObjectMapper mapper= new ObjectMapper();
        mapper.writeValue(response.getOutputStream(), body );       		
 	}	 
  
 }
-
+//JWT 토큰 : Header.Payload.Signature
 
 
 

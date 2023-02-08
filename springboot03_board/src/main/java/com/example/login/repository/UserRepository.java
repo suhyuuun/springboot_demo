@@ -10,5 +10,5 @@ import com.example.login.dto.User;
 public interface UserRepository {
 	void saveUser(User user);
 	
-	User getUserAccont(String username);
+	User getUserAccount(String username);
 }

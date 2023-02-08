@@ -7,6 +7,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+
 @Configuration
 @EnableWebSecurity
 public class CorsConfig {
@@ -27,7 +28,9 @@ public class CorsConfig {
 		// 모든 post, get, put, delete등 모든 메소드에 응답허용
 		config.addAllowedMethod("*");
 		
+		// 프런트앤드에 노출하도록 허용한다.
 		config.addExposedHeader("Authorization");
+		//config.addExposedHeader("refreshToken");
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
 	}

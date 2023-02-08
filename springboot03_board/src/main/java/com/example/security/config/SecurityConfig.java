@@ -16,16 +16,13 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.example.login.repository.UserRepository;
 import com.example.security.jwt.JwtAuthenticationFilter;
+import com.example.security.jwt.JwtAuthorizationFilter;
 import com.example.security.service.CorsConfig;
 
 
 //[1] POSTMAN에서 테스트
-//POST http://localhost:8090/login
-//boy, raw , json  => {"username":"min", "password":"1234"}
-//
-
-
-
+//POST http://localhost:8090/join
+//body, raw , json  => {"username":"min", "password":"1234"}
 
 @Configuration
 @EnableWebSecurity  //spring security 활성화- spring security filter가 스프링 필터체인에 등록이 된다.

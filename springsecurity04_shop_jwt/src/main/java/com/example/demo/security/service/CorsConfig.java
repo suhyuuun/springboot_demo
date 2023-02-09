@@ -25,7 +25,7 @@ public class CorsConfig  {
         config.addAllowedHeader("*"); //모든 요청 header에 응답을 허용한다.
         config.addAllowedMethod("*"); //모든 post, get, put, delete, patch요청에 응답을 허용한다.
        
-        config.addExposedHeader("Authorization");
+        //config.addExposedHeader("Authorization");
        // config.addExposedHeader("refreshToken");
         source.registerCorsConfiguration("/**", config);       
         return new CorsFilter(source);

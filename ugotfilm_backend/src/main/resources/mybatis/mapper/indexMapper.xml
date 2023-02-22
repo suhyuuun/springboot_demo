@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+
+<mapper namespace="com.ugotfilm.login.repository.IndexRepository">
+	<!-- 회원가입 -->
+	<insert id="saveUser" parameterType="UserDTO">
+		INSERT INTO ugotfilm_user(usercode, username, password, authRole, joindate)
+		VALUES(ugotfilm_user_usercode_seq.nextval,#{username, jdbcType=VARCHAR},#{password, jdbcType=VARCHAR}, #{authRole, jdbcType=VARCHAR},sysdate)
+	</insert>
+
+
+	<!-- 로그인 -->
+	<select id="getUserAccount"
+		resultType="UserDTO">
+		SELECT * FROM ugotfilm_user
+		WHERE username=#{username, jdbcType=VARCHAR}
+	</select>
+	 
+	<!-- 정보 수정 -->
+	
+	<!-- 탈퇴 -->
+	
+	<!-- 아이디 중복 체크 -->
+	
+	<!-- 닉네임 중복 체크 -->
+
+	
+</mapper>
+
+
+
+

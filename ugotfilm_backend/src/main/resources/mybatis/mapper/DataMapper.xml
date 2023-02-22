@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ugotfilm.data.dao.DataDao">
+	<!-- 유저의 정보로도 구분하여 클릭수 정보를 group by 하여 가져올 수 있음(연령대, 성별) -->
+
+
+	<!-- 영화 정보가 있는지 체크하는 쿼리 -->
+	<select id="exist" resultType="int">
+		SELECT count(*) FROM ugotfilm_MOVIE where MOVIECODE=#{MOVIECODE}
+	</select>
+	
+	<!-- 영화 정보를 저장하는 쿼리 -->
+	<insert id="saveMovie" parameterType="MovieDTO">
+		INSERT INTO ugotfilm_movie(moviecode, title, poster_url)
+		VALUES(#{moviecode}, #{title}, #{poster_url, jdbcType=VARCHAR})
+	</insert>
+	
+	<insert id="saveCrew" parameterType="CrewDTO">
+		INSERT INTO ugotfilm_director(personcode, name, profile_url)
+		VALUES(#{personcode}, #{name}, #{profile_url, jdbcType=VARCHAR})
+	</insert>
+	
+	<insert id="saveCast" parameterType="CastDTO">
+		INSERT INTO ugotfilm_cast(personcode, name, profile_url)
+		VALUES(#{personcode}, #{name}, #{profile_url, jdbcType=VARCHAR})
+	</insert>
+	
+	
+	<!-- 유저 취향 정보 추가 -->
+	<insert id="choiceMovie" parameterType="map">
+		INSERT INTO ugotfilm_movie_choice(usercode, moviecode, choice_date)
+		VALUES(#{usercode}, #{moviecode},sysdate)
+	</insert>
+	
+	
+	<!-- 유저 추가한 북마크 저장 쿼리 -->
+	<insert id="savebookmark" parameterType="int">
+		insert INTO ugotfilm_bookmark VALUES (#{usercode}, #{movicecode}, sysdate);
+	</insert>
+	
+	
+	<!-- 선호도 정보 추가 -->
+	<!-- 유저가 선택한 영화를 저장하는 쿼리 -->
+	<insert id="choice" parameterType="int">
+		insert INTO ugotfilm_choice VALUES (#{usercode}, #{movicecode}, sysdate);
+	</insert>
+	
+
+	
+	<!-- 검색 -->
+	<!-- 유저가 선호하는 감독 리스트 -->
+	<select id="director" resultType="MovieDTO">
+		select director, count(director)from (select * from (select u.*, m.*, c.choicedate from ugotfilm_choice c
+			left join ugotfilm_user u on u.usercode=c.usercode
+			left join ugotfilm_movie m on m.moviecode=c.moviecode) where usercode=#{usercode}) 
+		group by director order by director desc
+	</select>
+	
+	<!-- 유저가 선호하는 배우 리스트 -->
+	<select id="actor" resultType="MovieDTO">
+		select actor, count(actor)from (select * from (select u.*, m.*, c.choicedate from ugotfilm_choice c
+			left join ugotfilm_user u on u.usercode=c.usercode
+			left join ugotfilm_movie m on m.moviecode=c.moviecode) where usercode=#{usercode}) 
+		group by actor order by actor desc
+	</select>
+	
+	<!-- 유저가 선택한 영화의 장르를 저장하는 쿼리 -->
+	<select id="genre" resultType="MovieDTO">
+		select genre_ids, count(genre_ids) as count from (select * from (select u.*, m.*, c.choicedate from ugotfilm_choice c
+			left join ugotfilm_user u on u.usercode=c.usercode
+			left join ugotfilm_movie m on m.moviecode=c.moviecode) where usercode=#{usercode}) 
+		group by genre_ids order by genre_ids desc
+	</select>
+
+	<!-- 유져가 가장 많이 확인한 영화 정보 조회수 최대  -->
+	<select id="readcount" resultType="MovieDTO">
+		select title, count(title) from (select u.usercode, u.id, u.nickname, m.title from ugotfilm_choice c
+			left join ugotfilm_user u on u.usercode=c.usercode
+			left join ugotfilm_movie m on m.moviecode=c.moviecode)
+			where usercode=#{usercode} 
+			group by title 
+			order by count(title) desc
+	</select>
+
+	<!-- 회원 전체 통계 -->
+	<select id="totalreadcount" resultType="MovieDTO">
+		select m.title,  r.* from (select moviecode, count(moviecode) as count from ugotfilm_choice c group by moviecode) r 
+		left join ugotfilm_movie m on r.moviecode=m.moviecode;
+	</select>
+	
+
+</mapper>

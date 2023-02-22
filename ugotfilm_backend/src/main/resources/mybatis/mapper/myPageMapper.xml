@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ugotfilm.mypage.dao.MypageDao">
+	<select id="wordcloud" parameterType="int" resultType="GenreDTO">
+	select b.*, a.count from (
+		select genrecode, count(genrecode) as count from ugotfilm_genre_choice 
+		where usercode=#{usercode} group by genrecode) a
+	left join ugotfilm_genre b on a.genrecode=b.genrecode
+	</select>
+	
+</mapper>

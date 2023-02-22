@@ -1,9 +1,9 @@
 CREATE TABLE tb_user(
     id number,
-    username varchar2(20),
-    password varchar2(20),
+    username varchar2(60),
+    password varchar2(60),
     email varchar2(50),
-    authRole varchar2(30),
+    authRole varchar2(60),
     createDate Date
 );
 

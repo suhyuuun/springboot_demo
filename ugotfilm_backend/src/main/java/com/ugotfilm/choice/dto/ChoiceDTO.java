@@ -1,4 +1,5 @@
-package com.ugotfilm.data.dto;
+package com.ugotfilm.choice.dto;
+
 
 import org.springframework.stereotype.Component;
 
@@ -14,10 +15,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class CrewDTO {
+public class ChoiceDTO {
 	
-	private int personcode;
-	private String name;
-	private String profile_url;
-		
+	private int max;
+	private int min;
+	private int ageGroup;
+	private String gender;
 }

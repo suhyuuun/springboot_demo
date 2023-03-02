@@ -4,22 +4,22 @@ import java.util.List;
 
 import com.ugotfilm.data.dto.GenreDTO;
 import com.ugotfilm.data.dto.MovieDTO;
-import com.ugotfilm.data.dto.CastDTO;
-import com.ugotfilm.data.dto.CrewDTO;
+import com.ugotfilm.data.dto.PersonDTO;
+import com.ugotfilm.data.dto.DataDTO;
 
 
 public interface DataService {
 	
 	//정보 저장
 	public int saveMovieProcess(MovieDTO data);
-	public int saveCrewProcess(CrewDTO data);
-	public List<CastDTO> saveCastProcess();
-	public List<GenreDTO> saveGenreProcess();
+	public int saveCrewProcess(PersonDTO data);
+	public int saveCastProcess(PersonDTO data);
+	public int saveGenreProcess(GenreDTO data);
 	
 	//클릭 저장
-	public int choiceMovieProcess(int usercode, int moviecode);
-	public int choiceCastProcess(int usercode, int castcode);
-	public int choiceCrewProcess(int usercode, int crewcode);
-	public int choiceGenreProcess(int usercode, int genrecode);
+	public int choiceMovieProcess(MovieDTO dto);
+	public int choiceCrewProcess(PersonDTO dto);
+	public int choiceCastProcess(PersonDTO dto);
+	public int choiceGenreProcess(GenreDTO dto);
 	
 }

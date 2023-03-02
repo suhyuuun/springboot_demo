@@ -19,17 +19,18 @@ import lombok.ToString;
 public class UserDTO {
 
 
-	private int usercode;
-	private String username;
-	private String password;
-	private Date joinDate;
-	private String authRole;
+	private int usercode;		//X
+	private String username;	// X
+	private String password;	// pass
+	private Date joinDate;		//X
+	private String authRole;	//관리자 페이지
+	private String gender;		//'남''여'
+	private int birth;			//1988
+	private String nickname;	//수정
+
 	
 	
 	
-	private String nickname;
-//	private String gender;
-//	private int birth;
 	
 	
 	

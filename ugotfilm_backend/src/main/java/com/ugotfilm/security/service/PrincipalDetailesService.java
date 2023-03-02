@@ -30,7 +30,7 @@ public class PrincipalDetailesService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
 		   UserDTO userEntity = userRepository.getUserAccount(username);
-//		   System.out.println("userEntity:" + userEntity.getUsername());
+		   System.out.println("userEntity:" + userEntity.getUsername());
 		   if(userEntity == null) {		
 			   throw new UsernameNotFoundException(username);		 
 		   }

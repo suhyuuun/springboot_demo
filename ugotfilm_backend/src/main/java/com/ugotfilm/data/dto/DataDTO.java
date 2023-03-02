@@ -14,19 +14,24 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class MovieDTO {
-
-	//ID
-	private int moviecode ;
-	//타이틀
-	private String title ;
-	//포스터 이미지
-	private String poster_url;
-	//평점
-	private String vote_average ;
+public class DataDTO {
 	
-	//마이페이지용
+	//영화정보
+	private String movie;
+	
+	//장르정보
+	private String genrelist;
+	
+	//감독 정보
+	private String director;
+	
+	//배우정보
+	private String castlist;
+	
+	//회원정보
 	private int usercode;
-	private int count;
+	
+	//인물상세페이지용
+	private String person;
 	
 }

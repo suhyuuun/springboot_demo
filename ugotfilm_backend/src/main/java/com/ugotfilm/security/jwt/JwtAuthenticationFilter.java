@@ -42,7 +42,7 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
-//		System.out.println("JwtAuthenticationFilter => login 요청 처리를 시작");
+		System.out.println("JwtAuthenticationFilter => login 요청 처리를 시작");
 
 		try {
 			//			BufferedReader br = request.getReader();
@@ -53,7 +53,7 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
 
 			ObjectMapper om = new ObjectMapper();
 			UserDTO user= om.readValue(request.getInputStream(), UserDTO.class);
-//			System.out.printf("username:%s password:%s\n", user.getUsername(), user.getPassword());
+			System.out.printf("username:%s password:%s\n", user.getUsername(), user.getPassword());
 
 			UsernamePasswordAuthenticationToken authenticationToken = 
 					new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
@@ -62,7 +62,7 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
 			Authentication authentication = authManager.authenticate(authenticationToken);
 
 			PrincipalDetails principalDetails =  (PrincipalDetails)authentication.getPrincipal();
-//			System.out.printf("로그인 완료 됨(인증)  %s %s " , principalDetails.getUsername(), principalDetails.getPassword());
+			System.out.printf("로그인 완료 됨(인증)  %s %s " , principalDetails.getUsername(), principalDetails.getPassword());
 
 			return authentication;
 
@@ -81,7 +81,7 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
 			Authentication authResult) throws IOException, ServletException {
 
 
-//		System.out.println("successfulAuthentication 실행됨: 인증이 완료되었다는 의미이기도 함");
+		System.out.println("successfulAuthentication 실행됨: 인증이 완료되었다는 의미이기도 함");
 		PrincipalDetails principalDetails = (PrincipalDetails)authResult.getPrincipal();
 
 		//RSA방식은 아니고 Hash방식
@@ -91,9 +91,9 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
 				.withClaim("username",principalDetails.getUser().getUsername()) //회원구분용 id
 				.withClaim("authRole", principalDetails.getUser().getAuthRole()) //회원권한 구분용
 				.sign(Algorithm.HMAC512("mySecurityCos")); //signature를 생성하기 위한 Security
-//		System.out.println("jwtToken:" + jwtToken);
-//		System.out.println("authRole: "  + principalDetails.getUser().getAuthRole());
-//		System.out.println("usercode: "  + principalDetails.getUser().getUsercode());
+		System.out.println("jwtToken:" + jwtToken);
+		System.out.println("authRole: "  + principalDetails.getUser().getAuthRole());
+		System.out.println("usercode: "  + principalDetails.getUser().getUsercode());
 		//생성한 jwt을 응답헤더에 추가
 		response.addHeader("Authorization", "Bearer " + jwtToken); 
 
@@ -110,7 +110,7 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
 	@Override
 	protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException failed) throws IOException, ServletException {
-//		System.out.println("인증실패");
+		System.out.println("인증실패");
 		 response.setStatus(HttpStatus.UNAUTHORIZED.value());
 	        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 	        Map<String, Object> body = new LinkedHashMap<>();

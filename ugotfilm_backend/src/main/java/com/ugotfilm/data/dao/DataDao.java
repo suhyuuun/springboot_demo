@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ugotfilm.data.dto.GenreDTO;
 import com.ugotfilm.data.dto.MovieDTO;
-import com.ugotfilm.data.dto.CastDTO;
-import com.ugotfilm.data.dto.CrewDTO;
+import com.ugotfilm.data.dto.PersonDTO;
 
 @Mapper
 @Repository
@@ -19,24 +18,24 @@ public interface DataDao {
 	int saveMovie(MovieDTO data);
 	
 	// 감독 정보 저장
-	int saveCrew(CrewDTO data);
+	int saveCrew(PersonDTO data);
 	
 	// 배우 정보 저장
-	public List<CastDTO> saveCast();
+	int saveCast(PersonDTO data);
 	
 	// 장르 정보 저장
-	public List<GenreDTO> saveGenre();
+	int saveGenre(GenreDTO data);
 	
 	
 	// 영화 선호 정보 저장
-	int choiceMovie(@Param("usercode")int usercode, @Param("moviecode")int moviecode);
-	
-	// 배우 선호 정보 저장
-	int choiceCast(int usercode, int personcode);
+	int choiceMovie(MovieDTO dto);
 	
 	// 감독 선호 정보 저장
-	int choiceCrew(int usercode, int personcode);	
+	int choiceCrew(PersonDTO dto);	
 
+	// 배우 선호 정보 저장
+	int choiceCast(PersonDTO dto);
+	
 	// 장르 선호 정보 저장
-	int choiceGenre(int usercode, int genrecode);	
+	int choiceGenre(GenreDTO dto);
 }

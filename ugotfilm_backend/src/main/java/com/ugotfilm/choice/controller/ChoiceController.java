@@ -75,7 +75,7 @@ public class ChoiceController {
 
 		in.close();
 
-		System.out.println("결과 : " + curationList);
+		System.out.println("결과: " + curationList);
 		String[] res = curationList.replace("{", "").replace("}", "").replace(" ", "").split(",");
 
 		List<MovieDTO> curationMovie = new ArrayList<MovieDTO>();

@@ -39,7 +39,6 @@ public class MypageController {
 		List<GenreDTO> bestGenre = bestGenre(user);
 		List<PersonDTO> bestDirector = bestDirector(user);
 		List<PersonDTO> bestCast = bestCast(user);
-
 		
 		//프론트로 보낼 정보 세팅(유저 기준 선호 장르, 감독, 배우)
 		Map<String, Object> map = new HashMap<>();

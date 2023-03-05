@@ -6,13 +6,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ugotfilm.data.dto.GenreDTO;
-import com.ugotfilm.data.dto.MovieDTO;
 import com.ugotfilm.data.dto.PersonDTO;
 import com.ugotfilm.login.dto.UserDTO;
 import com.ugotfilm.login.repository.IndexRepository;

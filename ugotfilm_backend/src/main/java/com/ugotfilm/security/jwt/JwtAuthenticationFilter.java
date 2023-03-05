@@ -45,12 +45,6 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
 		System.out.println("JwtAuthenticationFilter => login 요청 처리를 시작");
 
 		try {
-			//			BufferedReader br = request.getReader();
-			//			String input = null;
-			//			while((input=br.readLine())!=null) {
-			//				System.out.println(input);
-			//			}
-
 			ObjectMapper om = new ObjectMapper();
 			UserDTO user= om.readValue(request.getInputStream(), UserDTO.class);
 			System.out.printf("username:%s password:%s\n", user.getUsername(), user.getPassword());
@@ -58,18 +52,15 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
 			UsernamePasswordAuthenticationToken authenticationToken = 
 					new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 
-
 			Authentication authentication = authManager.authenticate(authenticationToken);
 
 			PrincipalDetails principalDetails =  (PrincipalDetails)authentication.getPrincipal();
 			System.out.printf("로그인 완료 됨(인증)  %s %s " , principalDetails.getUsername(), principalDetails.getPassword());
 
 			return authentication;
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
-
 		return null;
 	}
 
@@ -79,7 +70,6 @@ public class JwtAuthenticationFilter  extends UsernamePasswordAuthenticationFilt
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
-
 
 		System.out.println("successfulAuthentication 실행됨: 인증이 완료되었다는 의미이기도 함");
 		PrincipalDetails principalDetails = (PrincipalDetails)authResult.getPrincipal();

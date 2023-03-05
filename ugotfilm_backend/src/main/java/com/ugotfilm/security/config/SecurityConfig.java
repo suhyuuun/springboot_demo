@@ -20,7 +20,6 @@ import com.ugotfilm.security.service.CorsConfig;
 //[1] POSTMAN에서 테스트
 //POST http://localhost:8090/login
 //body, raw , json  => {"username":"min", "password":"1234"}
-//
 
 @Configuration
 @EnableWebSecurity // spring security 활성화- spring security filter가 스프링 필터체인에 등록이 된다.

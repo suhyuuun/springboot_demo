@@ -102,10 +102,8 @@ public class BoardController {
 		//답변글이면
 		if(dto.getRef() !=0) {
 			return  String.valueOf(pv.getCurrentPage());
-			//return "redirect:/board/list/courrentPage=" + pv.getCurrentPage();
 		}else {	//제목글
 			return String.valueOf(1);
-			//return "redirect:/board/list/1";
 		}
 	}//end writeProMethod()
 	
@@ -136,10 +134,6 @@ public class BoardController {
 	public void deleteMethod(@PathVariable("num") int num, HttpServletRequest request) {
 		
 		service.deleteProcess(num, filePath);
-		
-//		int totalRecord = service.countProcess();
-//		this.pdto = new PageDTO(this.currentPage, totalRecord);
-		
 		
 	}//end deleteMethod()
 	
@@ -215,10 +209,5 @@ public class BoardController {
 	public void commentDeleteMethod(@PathVariable("num") int num, HttpServletRequest request) {
 		System.out.println("삭제요청 : " + num );
 		service.deleteCommentProcess(num);
-		
-//		int totalRecord = service.countProcess();
-//		this.pdto = new PageDTO(this.currentPage, totalRecord);
-		
-		
 	}//end deleteMethod()
 }//end class

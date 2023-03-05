@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,102 +38,86 @@ public class ChoiceController {
 
 	}
 
-	
+	// 유저 정보 체크용
 	@PostMapping("/choicecheck")
 	public int choiceCheck(UserDTO user) throws Exception {
-		
-		System.out.println("choiceck중");  
+		System.out.println("choiceck중");
 		System.out.println("usercode : " + user.getUsercode());
-	    return service.choiceCheck(user); 
-	   }
-	
+		return service.choiceCheck(user);
+	}// end choiceCheck
+
+	// 파이썬
 	@PostMapping("/checkMovie")
 	public List<MovieDTO> checkMovie(UserDTO user) throws Exception {
 		int usercode = user.getUsercode();
 		List<MovieDTO> curationMovie = new ArrayList<MovieDTO>();
-		int list = service.checkInfo(user);
-	
-		if(list != 0 ) {
-		System.out.println("usercode : " + usercode);
+		int list = service.checkInfo(user); // 유저 정보 체크용
 
-		URL url = new URL("http://127.0.0.1:5000/curation");
-		Map<String, Object> params = new LinkedHashMap<>(); // 파라미터 세팅
-		params.put("usercode", usercode);
+		if (list != 0) {
+			System.out.println("usercode : " + usercode);
 
-		StringBuilder postData = new StringBuilder();
-		for (Map.Entry<String, Object> param : params.entrySet()) {
-			if (postData.length() != 0)
-				postData.append('&');
-			postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-			postData.append('=');
-			postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-		}
-		byte[] postDataBytes = postData.toString().getBytes("UTF-8");
+			URL url = new URL("http://127.0.0.1:5000/curation");
+			Map<String, Object> params = new LinkedHashMap<>(); // 파라미터 세팅
+			params.put("usercode", usercode);
 
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestMethod("POST");
-		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-		conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
-		conn.setDoOutput(true);
-		conn.getOutputStream().write(postDataBytes); // POST 호출
-		
-		System.out.println(conn);
+			StringBuilder postData = new StringBuilder();
+			for (Map.Entry<String, Object> param : params.entrySet()) {
+				if (postData.length() != 0)
+					postData.append('&');
+				postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+				postData.append('=');
+				postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+			} // for문 end
+			byte[] postDataBytes = postData.toString().getBytes("UTF-8");
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-		
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
+			conn.setDoOutput(true);
+			conn.getOutputStream().write(postDataBytes); // POST 호출
 
-		String curationList = "";
-		String inputLine;
-		while ((inputLine = in.readLine()) != null) { // response 출력
-			curationList += inputLine;
+			System.out.println(conn);
 
-		}
+			BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+			String curationList = "";
+			String inputLine;
+			while ((inputLine = in.readLine()) != null) { // response 출력
+				curationList += inputLine;
+			} // while문 end
+			in.close();
+			System.out.println("결과 : " + curationList);
+			String[] res = curationList.replace("{", "").replace("}", "").replace(" ", "").split(",");
 
-		in.close();
-		
-		System.out.println("결과 : " + curationList);
-		
-		String[] res = curationList.replace("{", "").replace("}", "").replace(" ", "").split(",");
-		
-
-
-		if (res.length != 0) {
-			for (int i = 0; i < res.length; i++) {
-				int moviecode = Integer.parseInt(res[i]);
-				curationMovie.add(service.movieInfo(moviecode));
-			}
-		}
-		
-		System.out.println(curationMovie);
-		}
+			if (res.length != 0) {
+				for (int i = 0; i < res.length; i++) {
+					int moviecode = Integer.parseInt(res[i]);
+					curationMovie.add(service.movieInfo(moviecode));
+				} // for문 end
+			} // if문 end
+			System.out.println(curationMovie);
+		} // if문 end (list != 0)
 		return curationMovie;
-		
-	}
+	}// end checkMovie()
 
 	// 사용자 추천 리스트
 	@PostMapping("/curation")
 	public Map<String, Object> curationList(UserDTO user) throws Exception {
 		System.out.println("큐레이션 시작(usercode) :" + user.getUsercode());
-		// 유저 정보 가져옴
-		user = UserRepository.userInfo(user);
+		user = UserRepository.userInfo(user); // 유저 정보 가져옴
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("user", userChoiceInfo(user));
 		map.put("basic_curation", basicCuration(user));
 		map.put("gender_curation", curationGender(user));
 		map.put("age_curation", curationAge(user));
-
 		return map;
 	}// end genderList()
 
 	// 전체 회원 기준 큐레이션
 	public Map<String, Object> basicCuration(UserDTO user) throws Exception {
-
-		// 프론트로 보낼 정보 세팅
-		Map<String, Object> map = new HashMap<>();
-		// 기준 정보(연령대, 성별)
-		map.put("choice", userChoiceInfo(user));
-
+		Map<String, Object> map = new HashMap<>(); // 프론트로 보낼 정보 세팅
+		map.put("choice", userChoiceInfo(user)); // 기준 정보(연령대, 성별)
 		// 전체 기준 가장 많이 클릭한 장르, 영화리스트, 감독, 배우
 		map.put("bestMovie", bestMovie());
 		map.put("bestGenre", bestGenre());
@@ -142,12 +125,11 @@ public class ChoiceController {
 		map.put("bestCast", bestCast());
 
 		return map;
-	}
+	}// end basicCuration()
 
 	// 사용자 기반 큐레이션(연령대)
 	public Map<String, Object> curationAge(UserDTO user) throws Exception {
 		Map<String, Object> map = new HashMap<>();
-
 		// 로그인한 유저 연령대 기준 가장 많이 클릭한 장르, 영화 리스트, 감독, 배우
 		map.put("user", userChoiceInfo(user).getAgeGroup());
 		map.put("CurationMovie", bestBirthMovie(user));
@@ -156,12 +138,11 @@ public class ChoiceController {
 		map.put("CurationCast", bestBirthCast(user));
 
 		return map;
-	}
+	}// end curationAge()
 
 	// 사용자 기반 큐레이션(성별)
 	public Map<String, Object> curationGender(UserDTO user) throws Exception {
 		Map<String, Object> map = new HashMap<>();
-
 		// 로그인한 유저 성별 기준 가장 많이 클릭한 장르, 영화 리스트, 감독, 배우
 		map.put("user", userChoiceInfo(user).getGender());
 		map.put("CurationMovie", bestGenderMovie(user));
@@ -170,29 +151,26 @@ public class ChoiceController {
 		map.put("CurationCast", bestGenderCast(user));
 
 		return map;
-	}
+	}// end curationGender()
 
 	// 연령대 계산
 	public ChoiceDTO userChoiceInfo(UserDTO user) throws Exception {
-		// 1. 연령대를 구한다
+		// 1. 연령대를 구하기
 		LocalDate date = LocalDate.now();
 		int year = date.getYear();
 		int ageGroup = ((year - user.getBirth()) / 10) * 10;
 		int max = year - ageGroup - 9;
 		int min = year - ageGroup;
-
-		// 2. dto에 담아 리턴한다
+		// 2. dto에 담아 리턴
 		ChoiceDTO dto = new ChoiceDTO();
 		dto.setMax(max);
 		dto.setMin(min);
-
-		// 3. 연령대 정보 저장
+		// 3. 연령대 정보저장
 		dto.setAgeGroup(ageGroup);
-
-		// 4. 성별 정보 저장
+		// 4. 성별 정보저장
 		dto.setGender(user.getGender());
 		return dto;
-	}
+	}//end userChoiceInfo()
 
 	// 큐레이션
 	// 로그인한 유저의 성별을 사용하여 전체 회원의 선호 장르
@@ -254,8 +232,5 @@ public class ChoiceController {
 	public PersonDTO bestCast() throws Exception {
 		return service.bestCast();
 	}
-	
-	// 로그인한 유저의 초이스 확인
-	
-	
+
 }// end class

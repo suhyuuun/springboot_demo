@@ -13,17 +13,15 @@ create table ugotfilm_user(
 );
 
 -- 회원 유저코드 시퀀스
-
 DROP SEQUENCE ugotfilm_user_usercode_seq;
 
 create sequence ugotfilm_user_usercode_seq start with 1 increment by 1 nocache nocycle;
 
--- 회원 정보 샘플
-
-insert into ugotfilm_user values (ugotfilm_user_usercode_seq.nextval, 'user1', '123', 'nick1', sysdate, '남', 1996, 'ROLE_MEMBER');
-insert into ugotfilm_user values (ugotfilm_user_usercode_seq.nextval, 'user2', '123', 'nick2', sysdate, '여', 1996, 'ROLE_MEMBER');
+-- insert 추후 수정
 
 SELECT * FROM ugotfilm_user;
+
+commit;
 
 -- 영화 정보 테이블
 drop table ugotfilm_movie;
@@ -34,11 +32,10 @@ create table ugotfilm_movie(
 	poster_url varchar2(100) -- 영화 포스터 url
 );
 
--- 영화 정보 샘플
-
-insert into ugotfilm_movie values (505642, '블랙 팬서: 와칸다 포에버', 'url');
+commit;
 
 SELECT * FROM ugotfilm_movie;
+
 
 -- 장르 정보 테이블
 drop table ugotfilm_genre;
@@ -67,11 +64,11 @@ insert into ugotfilm_genre VALUES (878, 'SF');
 insert into ugotfilm_genre VALUES (10752, '전쟁');
 insert into ugotfilm_genre VALUES (37, '서부');
 
+commit;
+
 SELECT * FROM ugotfilm_genre;
 
--- 인물 정보 저장 테이블
-
---배우
+-- 배우 정보 저장 테이블
 DROP TABLE ugotfilm_cast;
 
 CREATE TABLE ugotfilm_cast(
@@ -80,9 +77,11 @@ CREATE TABLE ugotfilm_cast(
 	profile_url varchar2(100) -- 사람 이미지
 );
 
-INSERT INTO ugotfilm_cast VALUES (172069, 'Chadwick Aaron Boseman', 'Acting', 'url');
+commit;
 
--- 감독
+SELECT * FROM ugotfilm_cast;
+
+-- 감독 정보 테이블
 drop table ugotfilm_director;
 
 create table ugotfilm_director(
@@ -91,12 +90,10 @@ create table ugotfilm_director(
 	profile_url varchar2(100) -- 사람 이미지 url
 );
 
--- 인물 정보 샘플
+commit;
 
-insert into ugotfilm_director values (1056121, 'Ryan Coogler', 'Directing', 'url');
-
-SELECT * FROM ugotfilm_cast;
 SELECT * FROM ugotfilm_director;
+
 
 -- 유저 선택 기록 (영화)
 drop table ugotfilm_movie_choice;
@@ -107,6 +104,11 @@ create table ugotfilm_movie_choice(
 	choice_date date -- 선택 날짜
 );
 
+commit;
+
+SELECT * FROM ugotfilm_movie_choice;
+
+
 -- 유저 선택 기록 (감독)
 drop table ugotfilm_director_choice;
 
@@ -115,6 +117,10 @@ create table ugotfilm_director_choice(
 	personcode number, -- 사람 번호
 	choice_date date -- 선택 날짜
 );
+
+commit;
+
+SELECT * FROM ugotfilm_director_choice;
 
 -- 유저 선택 기록 (배우)
 drop table ugotfilm_cast_choice;
@@ -125,6 +131,11 @@ create table ugotfilm_cast_choice(
 	choice_date date -- 선택 날짜
 );
 
+commit;
+
+SELECT * FROM ugotfilm_cast_choice;
+
+
 -- 유저 선택 기록 (장르)
 drop table ugotfilm_genre_choice;
 
@@ -134,67 +145,23 @@ create table ugotfilm_genre_choice(
 	choice_date date -- 선택 날짜
 );
 
--- 유저 선택 샘플
-INSERT INTO ugotfilm_movie_choice VALUES (1, 505642, sysdate); -- 영화
-INSERT INTO ugotfilm_director_choice VALUES (1, 1056121, sysdate); -- 감독
-INSERT INTO ugotfilm_cast_choice VALUES (1, 172069, sysdate); -- 배우
+commit;
 
-INSERT INTO ugotfilm_genre_choice VALUES (1, 28, sysdate); -- 장르
-INSERT INTO ugotfilm_genre_choice VALUES (1, 12, sysdate); -- 장르
-INSERT INTO ugotfilm_genre_choice VALUES (1, 878, sysdate); -- 장르
+SELECT * FROM ugotfilm_genre_choice;
+
+-- 한줄평 테이블
+create table ugotfilm_movie_comment(            
+        pnum number,                       
+        num number,                        
+        writer number,                       
+        reg_date date,                                         
+        subject varchar2(4000),               
+        ip varchar2(20)                              
+);
+
+-- 한줄평 시퀀스
+create sequence ugotfilm_movie_comment_seq start with 1 increment by 1 nocache nocycle;
 
 commit;
 
-SELECT * FROM ugotfilm_movie_choice;
-SELECT * FROM ugotfilm_director_choice;
-SELECT * FROM ugotfilm_cast_choice;
-SELECT * FROM ugotfilm_genre_choice;
-
--- 다양한 기준의 정보 샘플
---1번 유저가 가장 선호하는 영화 장르(많이 클릭한 순)
-select g.name, u.* from (select genrecode, count(genrecode) as count from ugotfilm_genre_choice where usercode=1 group by genrecode) u 
-left join ugotfilm_genre g on g.genrecode=u.genrecode order by count desc;
-
-
--- 1번 유저가 클릭한 영화 리스트(많이 클릭한 순)
-select m.* from (select moviecode, count(moviecode) as count from ugotfilm_movie_choice where usercode=1 group by moviecode) u 
-left join ugotfilm_movie m on m.moviecode=u.moviecode order by count desc;
-
-SELECT * FROM UGOTFILM_MOVIE_CHOICE ;
-
-
-------------------------------------------------
-
--- 유저 성별에 따른 많이 클릭한 영화 리스트
-
-SELECT m.* FROM (
-	SELECT b.moviecode, count(b.moviecode) AS count
-	FROM UGOTFILM_USER  a, UGOTFILM_MOVIE_CHOICE  b
-	WHERE a.usercode = b.usercode
-	AND a.gender = (SELECT gender FROM UGOTFILM_USER WHERE usercode= 1) -- 유저 코드 값에 따라 바뀐다.
-	GROUP BY b.moviecode) g
-LEFT JOIN UGOTFILM_MOVIE m ON m.moviecode = g.moviecode ORDER BY count desc;
-
-
-------------------------------------------------------
-
--- 유저에 따른 많이 클릭한 장르별 리스트
-
-SELECT b.genrecode, count(b.genrecode) AS count
-FROM UGOTFILM_USER a, UGOTFILM_GENRE_CHOICE b
-WHERE a.usercode = b.usercode
-AND a.usercode = 1
-GROUP BY GENRECODE;
-
-
-
-
-
-
-
-
-
-
-
-
-
+select * from ugotfilm_movie_comment;

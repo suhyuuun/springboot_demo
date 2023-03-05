@@ -37,47 +37,46 @@ import com.ugotfilm.notice.dto.BoardDTO;
 import com.ugotfilm.notice.dto.PageDTO;
 import com.ugotfilm.notice.service.BoardService;
 
-
 @RestController
 public class CommentMovieController {
-	
+
 	@Autowired
 	private CommentMovieService service;
-	
+
 //	@Autowired
 //	private PageDTO pdto;
 //	
 //	private int currentPage;
-	
+
 	public CommentMovieController() {
-	
+
 	}
-	
-	//한줄평 보기
+
+	// 한줄평 보기
 	@GetMapping("/commentmovie/{moviecode}")
 	public Map<String, Object> viewMethod(@PathVariable("moviecode") int moviecode) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("blist", service.commentProcess(moviecode));
 		return map;
-	}//viewMethod()
-	
-	//한줄평 작성
-	@PostMapping(value="/commentmovie/write")
-	public String commentWriteProMethod(BoardDTO dto, HttpServletRequest request) throws IllegalStateException, IOException {
+	}// end viewMethod()
+
+	// 한줄평 작성
+	@PostMapping(value = "/commentmovie/write")
+	public String commentWriteProMethod(BoardDTO dto, HttpServletRequest request)
+			throws IllegalStateException, IOException {
 		dto.setIp(request.getRemoteAddr());
 		System.out.println("subject : " + dto.getSubject());
 		service.commentinsertProcess(dto);
 		return "작성완료";
-	}//end writeProMethod()
-	
-	@DeleteMapping(value="/commentmovie/delete/{num}")
+	}// end writeProMethod()
+
+	@DeleteMapping(value = "/commentmovie/delete/{num}")
 	public void commentDeleteMethod(@PathVariable("num") int num, HttpServletRequest request) {
-		System.out.println("삭제요청 : " + num );
+		System.out.println("삭제요청 : " + num);
 		service.deleteCommentProcess(num);
-		
+
 //		int totalRecord = service.countProcess();
 //		this.pdto = new PageDTO(this.currentPage, totalRecord);
-		
-		
-	}//end deleteMethod()
-}//end class
+
+	}// end deleteMethod()
+}// end class

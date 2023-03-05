@@ -104,5 +104,17 @@ public class ChoiceServiceImp implements ChoiceService{
 	public MovieDTO movieInfo(int moviecode) {
 		return Dao.movieInfo(moviecode);
 	}
+
+
+	@Override
+	public int checkInfo(UserDTO user) {
+		return Dao.checkMovie(user);
+	}
+
+
+	@Override
+	public int choiceCheck(UserDTO user) {
+		return Dao.choiceCheck(user);
+	}
 	
 }

@@ -53,9 +53,9 @@
 		VALUES(#{usercode}, #{genrecode}, sysdate)
 	</insert>
 
-	<!-- 유저 장르취향 정보 추가(moviecode추가)  
+	<!-- 유저 장르취향 정보 추가(moviecode추가)
 	<insert id="choiceGenre" parameterType="GenreDTO">
 		INSERT INTO ugotfilm_genre_choice(moviecode, usercode, genrecode, choice_date)
 		VALUES(#{moviecode}, #{usercode}, #{genrecode}, sysdate)
-	</insert>-->
+	</insert>-->  
 </mapper>

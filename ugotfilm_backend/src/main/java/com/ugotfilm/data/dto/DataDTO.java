@@ -34,4 +34,7 @@ public class DataDTO {
 	//인물상세페이지용
 	private String person;
 	
+	//장르정보
+	private int genre;
+	
 }

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,9 +39,22 @@ public class ChoiceController {
 
 	}
 
-	@PostMapping("/curationmovie")
-	public List<MovieDTO> test(UserDTO user) throws Exception {
+	
+	@PostMapping("/choicecheck")
+	public int choiceCheck(UserDTO user) throws Exception {
+		
+		System.out.println("choiceck중");  
+		System.out.println("usercode : " + user.getUsercode());
+	    return service.choiceCheck(user); 
+	   }
+	
+	@PostMapping("/checkMovie")
+	public List<MovieDTO> checkMovie(UserDTO user) throws Exception {
 		int usercode = user.getUsercode();
+		List<MovieDTO> curationMovie = new ArrayList<MovieDTO>();
+		int list = service.checkInfo(user);
+	
+		if(list != 0 ) {
 		System.out.println("usercode : " + usercode);
 
 		URL url = new URL("http://127.0.0.1:5000/curation");
@@ -63,8 +77,11 @@ public class ChoiceController {
 		conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
 		conn.setDoOutput(true);
 		conn.getOutputStream().write(postDataBytes); // POST 호출
+		
+		System.out.println(conn);
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+		
 
 		String curationList = "";
 		String inputLine;
@@ -74,17 +91,24 @@ public class ChoiceController {
 		}
 
 		in.close();
-
-		System.out.println("결과: " + curationList);
+		
+		System.out.println("결과 : " + curationList);
+		
 		String[] res = curationList.replace("{", "").replace("}", "").replace(" ", "").split(",");
+		
 
-		List<MovieDTO> curationMovie = new ArrayList<MovieDTO>();
-		for (int i = 0; i < res.length; i++) {
-			int moviecode = Integer.parseInt(res[i]);
-			curationMovie.add(service.movieInfo(moviecode));
+
+		if (res.length != 0) {
+			for (int i = 0; i < res.length; i++) {
+				int moviecode = Integer.parseInt(res[i]);
+				curationMovie.add(service.movieInfo(moviecode));
+			}
 		}
-
+		
+		System.out.println(curationMovie);
+		}
 		return curationMovie;
+		
 	}
 
 	// 사용자 추천 리스트
@@ -130,7 +154,7 @@ public class ChoiceController {
 		map.put("CurationGenre", bestBirthGenre(user));
 		map.put("CurationDirector", bestBirthDirector(user));
 		map.put("CurationCast", bestBirthCast(user));
-		
+
 		return map;
 	}
 
@@ -230,4 +254,8 @@ public class ChoiceController {
 	public PersonDTO bestCast() throws Exception {
 		return service.bestCast();
 	}
+	
+	// 로그인한 유저의 초이스 확인
+	
+	
 }// end class

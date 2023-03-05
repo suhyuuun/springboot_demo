@@ -32,7 +32,7 @@ public class IndexController {
 
 
 	public IndexController() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	//회원 가입
@@ -66,13 +66,13 @@ public class IndexController {
 	
 	//비밀번호 수정
 	@PutMapping(value="/pwmodify")
-	public void pwmodifyMethod(@RequestBody UserDTO dto)throws Exception{
-		System.out.println("비밀번호 수정 시작");
-		System.out.println(dto.getUsercode());
-		System.out.println(dto.getPassword());
-		dto.setPassword(encodePassword.encode(dto.getPassword()));
-		UserRepository.pwUpdateProcess(dto);
-	}
+   public void pwmodifyMethod(@RequestBody UserDTO dto)throws Exception{
+      System.out.println("비밀번호 수정 시작");
+      System.out.println(dto.getUsercode());
+      System.out.println(dto.getPassword());
+      dto.setPassword(encodePassword.encode(dto.getPassword()));
+      UserRepository.pwUpdateProcess(dto);
+   }
 	
 	//탈퇴(유저의 권한을 수정하는 형태)
 	@PutMapping(value="/leave")

@@ -61,7 +61,6 @@ dependencies {
 	
 	//python
 	implementation 'org.apache.commons:commons-exec:1.3'
-	
 }
 
 tasks.named('test') {

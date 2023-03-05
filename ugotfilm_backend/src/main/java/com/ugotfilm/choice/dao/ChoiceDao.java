@@ -44,4 +44,10 @@ public interface ChoiceDao {
 	
 	// 영화코드로 영화 검색
 	MovieDTO movieInfo(int moviecode);
+	
+	// 체크
+	int checkMovie(UserDTO user);
+	
+	// 로그인 유저 장르 체크용
+	int choiceCheck(UserDTO user);
 }

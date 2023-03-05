@@ -8,7 +8,13 @@
 		SELECT * from UGOTFILM_MOVIE WHERE moviecode=#{moviecode}
 	</select>
 
+	<select id="choiceCheck" parameterType="UserDTO" resultType="int">
+		SELECT count(*) from UGOTFILM_genre_choice WHERE usercode=#{usercode}
+	</select>
 
+	<select id="checkchoice" parameterType="UserDTO"  resultType="int">
+		<![CDATA[SELECT count(*) from UGOTFILM_genre_choice WHERE usercode=#{usercode} and choice_date < sysdate -2/24]]>
+	</select>
 	<!-- 유저의 정보로도 구분하여 클릭수 정보를 group by 하여 가져올 수 있음(연령대, 성별) -->
 
 	<!-- 성별에 따른 영화 리스트 -->
@@ -93,7 +99,7 @@
 		on c.usercode=u.usercode 
 		where gender=#{gender})r 
 		group by moviecode 
-		order by count desc) where rownum=1)r 
+		order by count desc) )r 
 		left join ugotfilm_movie g 
 		on g.moviecode=r.moviecode
 	</select>
@@ -159,7 +165,7 @@
 		on c.usercode=u.usercode 
 		where birth >= #{max} and birth <= #{min})r 
 		group by moviecode 
-		order by count desc) where rownum=1)r 
+		order by count desc) )r 
 		left join ugotfilm_movie g 
 		on g.moviecode=r.moviecode
 		]]>
@@ -223,7 +229,7 @@
 		left join ugotfilm_user u 
 		on c.usercode=u.usercode)r 
 		group by moviecode 
-		order by count desc) where rownum=1)r 
+		order by count desc) )r 
 		left join ugotfilm_movie g 
 		on g.moviecode=r.moviecode
 	</select>

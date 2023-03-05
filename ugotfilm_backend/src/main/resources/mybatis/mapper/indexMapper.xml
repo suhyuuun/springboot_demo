@@ -25,14 +25,6 @@
 		SELECT * FROM ugotfilm_user
 		WHERE usercode=#{usercode, jdbcType=VARCHAR}
 	</select>
-	
-	<!-- 비밀번호 수정 -->
-	<update id="pwUpdateProcess" parameterType="UserDTO">
-		UPDATE ugotfilm_user
-		SET password=#{password}
-		WHERE usercode=#{usercode, jdbcType=VARCHAR}
-	</update>
-	
 	<!-- 정보 수정 -->
 	<update id="updateProcess" parameterType="UserDTO">
 		UPDATE ugotfilm_user
@@ -62,6 +54,13 @@
 	<select id="sameUsercode" resultType="int">
 		select count(nickname) from ugotfilm_user where nickname=#{nickname, jdbcType=VARCHAR} and usercode=#{usercode, jdbcType=VARCHAR}
 	</select>
+	
+	   <!-- 비밀번호 수정 -->
+   <update id="pwUpdateProcess" parameterType="UserDTO">
+      UPDATE ugotfilm_user
+      SET password=#{password}
+      WHERE usercode=#{usercode, jdbcType=VARCHAR}
+   </update>
 </mapper>
 
 

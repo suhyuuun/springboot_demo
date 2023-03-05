@@ -33,6 +33,18 @@ public class DataController {
 	}	
 
 	//영화 장르 정보 저장
+	@PostMapping("/save/firstchoice")
+	public String saveFirstChoiceMethod(DataDTO data, GenreDTO genre) throws Exception{
+		System.out.println("data" + data);
+		genre.setUsercode(data.getUsercode());
+		genre.setGenrecode(data.getGenre());
+
+		//장르 클릭 저장
+		service.choiceGenreProcess(genre);
+		return "확인";
+	}
+			
+	//영화 장르 정보 저장
 	@PostMapping("/save/detail/movieinfo")
 	public String saveMovieInfoMethod(DataDTO data, MovieDTO dto) throws Exception{
 		JsonParser parser = new JsonParser();

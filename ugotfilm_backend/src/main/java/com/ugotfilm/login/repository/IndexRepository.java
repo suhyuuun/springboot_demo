@@ -17,9 +17,6 @@ public interface IndexRepository {
 	//정보 수정
 	int updateProcess(UserDTO user);
 	
-	//비밀번호 수정
-	int pwUpdateProcess(UserDTO user);
-	
 	//탈퇴(유저의 권한을 수정하는 형태)
 	int leaveProcess(UserDTO user);
 	//아이디 중복 체크
@@ -33,4 +30,7 @@ public interface IndexRepository {
 	
 	//유저 정보 가져오기
 	UserDTO userInfo(UserDTO user);
+	
+	//비밀번호 수정
+	int pwUpdateProcess(UserDTO user);
 }

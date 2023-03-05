@@ -38,4 +38,10 @@ public interface ChoiceService {
 	
 	//영화코드로 영화 검색
 	public MovieDTO movieInfo(int moviecode);
+	
+	//유저 정보 체크용
+	public int checkInfo(UserDTO user);
+	
+	//로그인한 유저 장르 선호도 체크용
+	public int choiceCheck(UserDTO user);
 }
